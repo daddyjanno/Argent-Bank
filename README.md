@@ -146,7 +146,6 @@ Le front-end sera lancé à l'URL:
 `http://localhost:3000/`
 
 
-
 ## Développé avec :
 
 -   [Visual Studio Code](https://code.visualstudio.com/)
