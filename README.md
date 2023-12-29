@@ -10,6 +10,7 @@
 
 #Objectifs:
 
+
 #### Écrire des appels à l'API REST pour connecter le front au back et modéliser une API.
 
 ## Phase 1: Créer un système d'authentification
@@ -145,8 +146,6 @@ Le front-end sera lancé à l'URL:
 `http://localhost:3000/`
 
 
-
-
 ## Développé avec :
 
 -   [Visual Studio Code](https://code.visualstudio.com/)
@@ -155,3 +154,4 @@ Le front-end sera lancé à l'URL:
 -   [React Router V6](https://reactrouter.com/)
 -   [Redux](https://redux.js.org/) - Bibliothèque JS de gestion d'état pour applications web
 -   [GitHub](https://github.com/) - Outil de gestion de versions
+
