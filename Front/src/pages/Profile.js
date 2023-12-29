@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { getAuthToken } from '../features/auth/authSlice'
-import { fetchUserData, getUserData } from '../features/user/userSlice'
 import UserEditForm from '../features/user/UserEditForm'
 import Account from '../features/Account/Account'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAuthConnected, getUserInfos, setUser } from '../store/authSlice'
+import { useGetUserInfosQuery } from '../store/apiSlice'
 
 function Profile() {
     const dispatch = useDispatch()
     const [editToggle, setEditToggle] = useState(false)
-    const user = useSelector(getUserData)
-    const token = useSelector(getAuthToken)
+    const connected = useSelector(getAuthConnected)
+    const user = useSelector(getUserInfos)
+    const userInfos = useGetUserInfosQuery(null, {
+        skip: !connected && !Object.keys(user).length,
+    })
 
     useEffect(() => {
-        dispatch(fetchUserData(token))
-    }, [dispatch, token])
+        if (!Object.keys(user).length && userInfos.data) {
+            dispatch(setUser(userInfos.data))
+        }
+    }, [dispatch, user, userInfos.data])
 
     const handleClick = (e) => {
         e.preventDefault()
@@ -26,7 +31,7 @@ function Profile() {
                 <h1>
                     Welcome back
                     <br />
-                    {user.firstName} {user.lastName}
+                    {!editToggle && `${user.firstName} ${user.lastName}`}
                 </h1>
                 {editToggle ? (
                     <UserEditForm

@@ -10,6 +10,7 @@
 
 #Objectifs:
 
+
 #### Écrire des appels à l'API REST pour connecter le front au back et modéliser une API.
 
 ## Phase 1: Créer un système d'authentification
@@ -143,6 +144,7 @@ Pour en apprendre plus sur le fonctionnement de l'API, une fois l'environnement 
 
 Le front-end sera lancé à l'URL:
 `http://localhost:3000/`
+
 
 
 
