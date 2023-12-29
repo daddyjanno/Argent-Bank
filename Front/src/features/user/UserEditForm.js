@@ -1,39 +1,36 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getUserInfos, setUser } from '../../store/authSlice'
-import { useEditUserInfosMutation } from '../../store/apiSlice'
+
+import { getUserData, updateUserData } from './userSlice'
+import { getAuthToken } from '../auth/authSlice'
 
 function UserEditForm({ setEditToggle }) {
     const dispatch = useDispatch()
-    const user = useSelector(getUserInfos)
+    const token = useSelector(getAuthToken)
+    const user = useSelector(getUserData)
     const [userNames, setUserNames] = useState({
         firstName: '',
         lastName: '',
     })
-
-    // getting function from custom hook created by RTK Query
-    const [editUserInfos] = useEditUserInfosMutation()
 
     const canSave = Boolean(userNames.firstName) && Boolean(userNames.lastName)
 
     const handleCancel = () => {
         setEditToggle(false)
     }
+
     const handleChange = (event) => {
         setUserNames({
             ...userNames,
             [event.target.name]: event.target.value,
         })
     }
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        if (
-            user.firstName !== userNames.firstName ||
-            user.lastName !== userNames.lastName
-        ) {
-            editUserInfos(userNames)
-            dispatch(setUser(userNames))
-            handleCancel()
+
+    const handleEdit = async (token, userNames) => {
+        const data = { token, userNames }
+        if (canSave) {
+            dispatch(updateUserData(data))
+            setEditToggle(false)
         }
     }
 
@@ -60,13 +57,13 @@ function UserEditForm({ setEditToggle }) {
                 <button
                     className="edit-content-button"
                     disabled={!canSave}
-                    onClick={(e) => handleSubmit(e)}
+                    onClick={() => handleEdit(token, userNames)}
                 >
                     Save
                 </button>
                 <button
                     className="edit-content-button"
-                    onClick={() => handleCancel()}
+                    onClick={() => handleCancel(token, userNames)}
                 >
                     Cancel
                 </button>

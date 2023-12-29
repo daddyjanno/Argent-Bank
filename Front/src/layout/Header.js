@@ -1,22 +1,18 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import Logo from '../../assets/argentBankLogo.png'
+import Logo from '../assets/argentBankLogo.png'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-    emptyData,
-    getAuthConnected,
-    getUserInfos,
-    logout,
-} from '../../store/authSlice'
+import { getAuthConnected, logout } from '../features/auth/authSlice'
+import { emptyUserData, getUserData } from '../features/user/userSlice'
 
 function Header() {
     const dispatch = useDispatch()
+    const firstName = useSelector(getUserData).firstName
     const connected = useSelector(getAuthConnected)
-    const user = useSelector(getUserInfos)
 
     const handleLogOut = () => {
         dispatch(logout())
-        dispatch(emptyData())
+        dispatch(emptyUserData())
     }
 
     return (
@@ -32,7 +28,7 @@ function Header() {
             <div>
                 {!connected && (
                     <NavLink className="main-nav-item" to="/login">
-                        <i className="fa fa-user-circle"></i>
+                        <i className="fa fa-user-circle" aria-hidden="true"></i>
                         Sign In
                     </NavLink>
                 )}
@@ -40,7 +36,7 @@ function Header() {
                     <>
                         <NavLink className="main-nav-item" to="/profile">
                             <i className="fa fa-user-circle"></i>
-                            {user.firstName}
+                            {firstName}
                         </NavLink>
                         <NavLink
                             className="main-nav-item"
