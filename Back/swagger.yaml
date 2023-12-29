@@ -68,6 +68,7 @@ paths:
       parameters:
         - in: header
           name: Authorization
+          type: string
           description: Attach Bearer JWT token
           required: true
       produces:
@@ -91,6 +92,7 @@ paths:
       parameters:
         - in: header
           name: Authorization
+          type: string
           description: Attach Bearer JWT token
           required: true
         - in: body
@@ -110,6 +112,144 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+
+  /transactions/{userId}/{accountId}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Transaction API
+      description: API to get the list of transactions for a specific account and a specific user
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: path
+          type: string
+          name: userId
+          description: The user id
+          required: true
+        - in: path
+          type: string
+          name: accountId
+          description: The account id
+          required: true
+        - in: query
+          type: string
+          name: month
+          description: selected month
+          required: false
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Transaction retrieved successfully
+          schema:
+            $ref: "#/definitions/TransactionsResponse"
+        "400":
+          description: Invalid Fields
+        '404':
+          description: Invalid userId or accountId
+        "500":
+          description: Internal Server Error
+
+  /transactions/{userId}/{accountId}/{transactionId}:
+    get:
+      security:
+          - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Transaction API
+      description: API to get a specific transaction from a specific account for a specific user
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: path
+          type: string
+          name: userId
+          description: The user id
+          required: true
+        - in: path
+          type: string
+          name: accountId
+          description: The account id
+          required: true
+        - in: path
+          type: string
+          name: transactionId
+          description: The transaction id
+          required: true
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Transaction retrieved successfully
+          schema:
+            $ref: "#/definitions/Transaction"
+        "400":
+          description: Invalid Fields
+        '404':
+          description: Invalid userId or accountId or transactionId
+        "500":
+          description: Internal Server Error
+
+
+    patch:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Transaction API
+      description: API to modify a note or the category in a specific transaction. If set as an empty string, it can be consider as "deleted"
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: path
+          type: string
+          name: userId
+          description: The user id
+          required: true
+        - in: path
+          type: string
+          name: accountId
+          description: The account id
+          required: true
+        - in: path
+          type: string
+          name: transactionId
+          description: The transaction id
+          required: true
+        - in: body
+          name: body
+          description: Transaction's note Payload
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionNoteOrCategory"
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction successully modified
+          schema:
+            $ref: '#/definitions/TransactionNoteOrCategory'
+        '400':
+          description: Invalid Fields
+        '404':
+          description: Invalid userId or accountId or transactionId
+        '500':
+          description: Internal Server Error
+
+
+
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -163,4 +303,48 @@ definitions:
       firstName:
         type: string
       lastName:
+        type: string
+  TransactionsResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          transactions:
+            type: array
+            description: Array Of transactions
+            items:
+              $ref: "#/definitions/Transaction"
+  Transaction:
+    type: object
+    properties:
+      id:
+        type: string
+      userId:
+        type: string
+      date:
+        type: string
+        pattern: "yyyy-mm-dd"
+      amount:
+        type: number
+      balance:
+        type: number
+      description:
+        type: string
+      transactionType:
+        type: string
+      category:
+        type: string
+      notes:
+        type: string
+  TransactionNoteOrCategory:
+    type: object
+    properties:
+      category:
+        type: string
+      notes:
         type: string
