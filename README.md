@@ -146,6 +146,8 @@ Le front-end sera lancé à l'URL:
 `http://localhost:3000/`
 
 
+
+
 ## Développé avec :
 
 -   [Visual Studio Code](https://code.visualstudio.com/)
@@ -154,4 +156,3 @@ Le front-end sera lancé à l'URL:
 -   [React Router V6](https://reactrouter.com/)
 -   [Redux](https://redux.js.org/) - Bibliothèque JS de gestion d'état pour applications web
 -   [GitHub](https://github.com/) - Outil de gestion de versions
-
