@@ -1,40 +1,51 @@
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import {
-    changeUserCredentials,
-    getAuthError,
-    getAuthStatus,
-    getUserToken,
-} from './authSlice'
+import React, { useEffect, useState } from 'react'
 import Loader from '../../utils/Loader/Loader'
+import { useLazyGetTokenQuery } from '../../store/apiSlice'
+import { useDispatch } from 'react-redux'
+import { login } from '../../store/authSlice'
+import { useNavigate } from 'react-router-dom'
 
-function AuthForm() {
+function LoginForm() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
+
+    // get infos in the local storage
     const localStorageEmail = localStorage.getItem('email')
     const localStoragePassword = localStorage.getItem('password')
+
+    // local state
     const [credentials, setCredentials] = useState({
         email: localStorageEmail || '',
         password: localStoragePassword || '',
     })
-    const [rememberMe, setRememberMe] = useState(true)
+    const [rememberMe, setRememberMe] = useState(false)
 
-    const authError = useSelector(getAuthError)
-    const authStatus = useSelector(getAuthStatus)
+    // getting functions from custom hook created by RTK Query
+    const [getToken, getTokenResult] = useLazyGetTokenQuery()
 
-    const handleRememberMe = () => {
-        setRememberMe(!rememberMe)
-    }
+    useEffect(() => {
+        if (getTokenResult.isSuccess) {
+            dispatch(login(getTokenResult.data))
+            navigate('/profile')
+        }
+    }, [dispatch, getTokenResult.isSuccess, getTokenResult.data, navigate])
 
+    // logic to display error message if credentials are invalid, or if API is down
     let content
-    if (authStatus === 'failed') {
-        content = <span className="errorMessage">{authError}</span>
-    } else if (authStatus === 'loading') {
+    // when loading, display the Loader component
+    if (getTokenResult.isLoading) {
         content = <Loader />
     }
+    // if failed to fetch, display the following message
+    else if (getTokenResult.error?.error) {
+        content = <span>API error</span>
+    }
+    // if login or password are incorect, display the following message
+    else if (getTokenResult.error) {
+        content = <span>Invalid Login or Password</span>
+    }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
         if (rememberMe) {
             localStorage.setItem('email', credentials.email)
@@ -43,15 +54,18 @@ function AuthForm() {
             localStorage.removeItem('email')
             localStorage.removeItem('password')
         }
-        await dispatch(changeUserCredentials(credentials))
-        await dispatch(getUserToken(credentials))
-        navigate('/profile')
+        getToken(credentials)
     }
+
     const handleChange = (event) => {
         setCredentials({
             ...credentials,
             [event.target.name]: event.target.value,
         })
+    }
+
+    const handleRememberMe = () => {
+        setRememberMe(!rememberMe)
     }
 
     return (
@@ -87,9 +101,9 @@ function AuthForm() {
                 <label htmlFor="remember-me">Remember me</label>
             </div>
             <button className="sign-in-button">Sign In</button>
-            {content}
+            <span className="errorMessage">{content}</span>
         </form>
     )
 }
 
-export default AuthForm
+export default LoginForm
