@@ -8,7 +8,7 @@
 [![React](https://img.shields.io/badge/react-20232a?style=for-the-badge&logo=react&logocolor=61dafb)](https://reactjs.org/)
 [![Redux](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)](https://redux.js.org/)
 
-#Objectifs:
+# Objectifs:
 
 
 #### Écrire des appels à l'API REST pour connecter le front au back et modéliser une API.
