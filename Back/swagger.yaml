@@ -240,7 +240,7 @@ paths:
         '200':
           description: Transaction successully modified
           schema:
-            $ref: '#/definitions/TransactionNoteOrCategory'
+            $ref: '#/definitions/Transaction'
         '400':
           description: Invalid Fields
         '404':
