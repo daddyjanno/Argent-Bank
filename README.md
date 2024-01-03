@@ -8,7 +8,7 @@
 [![React](https://img.shields.io/badge/react-20232a?style=for-the-badge&logo=react&logocolor=61dafb)](https://reactjs.org/)
 [![Redux](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)](https://redux.js.org/)
 
-#Objectifs:
+# Objectifs:
 
 
 #### Écrire des appels à l'API REST pour connecter le front au back et modéliser une API.
@@ -62,6 +62,15 @@ Le projet se décompose en deux phases :
 ### Phase 2 :
 #### Contraintes techniques :
 - Utilisation du format YAML et de Swagger pour visualiser les futurs endpoints de l'API pour gérer toute la partie transaction de l'application
+
+
+### Branche Main:
+
+utilisation de Redux et de Redux Toolkit (createAsyncThunk et createSlice)
+
+### Branche createApi:
+
+dans l'optique d'une mise en production de la phase 2, et donc de l'augmentation des appels à l'API, j'ai travaillé sur cette branche avec RTK Query et createApi, afin de centraliser les queries et mutations dans un seul et même fichier, et de diminuer la quantité d'informations que l'on stocke dans le state pour préférer une gestion en cache.
 
 
 ## Installation :
